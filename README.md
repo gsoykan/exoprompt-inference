@@ -12,7 +12,7 @@ tags:
   - exoprompt
 pinned: false
 license: mit
-short_description: ExoPrompt paper demo — transformer-based greenhouse climate forecasting
+short_description: ExoPrompt paper demo — greenhouse climate forecasting
 ---
 
 # ExoPrompt — Greenhouse Climate Forecasting Demo
