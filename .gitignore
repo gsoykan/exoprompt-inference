@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv/
+
+# uv
+.uv-cache/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Hugging Face cache (downloaded checkpoints)
+.cache/
+hf_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+
+# Local outputs
+logs/
+outputs/
+*.ckpt

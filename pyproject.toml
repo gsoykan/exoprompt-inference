@@ -1,0 +1,31 @@
+[project]
+name = "exoprompt-inference"
+version = "0.1.0"
+description = "Streamlit inference demo for ExoPrompt: transformer-based greenhouse climate forecasting with structured conditioning."
+readme = "README.md"
+authors = [
+    { name = "Gurkan Soykan", email = "gurkan.soykan@wur.nl" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    # Pinned to the paper's runtime: torch 2.4.x still defaults torch.load to
+    # weights_only=False, so Lightning checkpoints containing OmegaConf hparams
+    # load without allowlisting unpicklers. Bump deliberately, not casually.
+    "torch==2.4.1",
+    "lightning>=2.2,<2.5",
+    "torchmetrics>=1.0,<1.5",
+    "einops>=0.7",
+    "numpy>=1.26,<2.0",
+    "pandas>=2.2",
+    "matplotlib>=3.8",
+    "plotly>=5.20",
+    "pydantic>=2.6",
+    "python-dotenv>=1.0",
+    "streamlit>=1.32",
+    "huggingface-hub>=0.23",
+    "omegaconf>=2.3",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.9,<0.10.0"]
+build-backend = "uv_build"
