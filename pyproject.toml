@@ -29,3 +29,17 @@ dependencies = [
 [build-system]
 requires = ["uv_build>=0.9.9,<0.10.0"]
 build-backend = "uv_build"
+
+# On Linux, prefer the CPU-only torch wheels. PyPI's default torch wheel for
+# Linux bundles ~2.5 GB of CUDA / cuDNN / Triton deps that the HF Spaces
+# CPU-Basic runtime never uses. macOS arm64 wheels are already CPU-only, so
+# we leave the default index in place for local dev.
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", marker = "sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
