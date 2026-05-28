@@ -17,6 +17,12 @@ short_description: ExoPrompt paper demo — greenhouse climate forecasting
 
 # ExoPrompt — Greenhouse Climate Forecasting Demo
 
+📄 [**Paper**](https://doi.org/10.1016/j.compag.2026.111673)
+&nbsp;·&nbsp; 💻 [**Original paper repo**](https://github.com/gsoykan/ExoPrompt)
+&nbsp;·&nbsp; 🛠️ [**Demo source**](https://github.com/gsoykan/exoprompt-inference)
+&nbsp;·&nbsp; 🤗 [**Checkpoints**](https://huggingface.co/gsoykan/exoprompt-checkpoints)
+&nbsp;·&nbsp; 🚀 [**Live demo**](https://huggingface.co/spaces/gsoykan/exoprompt-inference)
+
 Interactive Streamlit demo for [ExoPrompt](https://doi.org/10.1016/j.compag.2026.111673):
 transformer-based greenhouse climate forecasting with structured exogenous prompts and
 physics-based simulation.

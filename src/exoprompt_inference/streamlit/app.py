@@ -321,9 +321,19 @@ def render_main(config: dict):
 
     st.title("🌿 Greenhouse Climate Predictor")
     st.markdown(
-        "Predict indoor climate (temperature, vapor pressure, CO2) using trained models. "
-        "Relative humidity is calculated from temperature and vapor pressure."
+        "Predict indoor climate (temperature, vapor pressure, CO₂) with the "
+        "**[ExoPrompt](https://doi.org/10.1016/j.compag.2026.111673)** transformer "
+        "— vanilla or conditioned on 254 structural / environmental / crop parameters. "
+        "Relative humidity is derived from temperature and vapor pressure."
     )
+    st.markdown(
+        "📄 [**Paper**](https://doi.org/10.1016/j.compag.2026.111673)"
+        " &nbsp;·&nbsp; 💻 [**Original paper repo**](https://github.com/gsoykan/ExoPrompt)"
+        " &nbsp;·&nbsp; 🛠️ [**Demo source**](https://github.com/gsoykan/exoprompt-inference)"
+        " &nbsp;·&nbsp; 🤗 [**Checkpoints**](https://huggingface.co/gsoykan/exoprompt-checkpoints)",
+        unsafe_allow_html=True,
+    )
+    st.divider()
 
     # Check if we have required inputs
     if config["csv_bytes"] is None:
