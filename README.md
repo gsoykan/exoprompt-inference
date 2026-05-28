@@ -3,11 +3,16 @@ title: ExoPrompt Greenhouse Climate Demo
 emoji: 🌱
 colorFrom: green
 colorTo: blue
-sdk: streamlit
-sdk_version: 1.32.0
-app_file: app.py
+sdk: docker
+app_port: 8501
+tags:
+  - streamlit
+  - time-series-forecasting
+  - greenhouse
+  - exoprompt
 pinned: false
 license: mit
+short_description: ExoPrompt paper demo — transformer-based greenhouse climate forecasting
 ---
 
 # ExoPrompt — Greenhouse Climate Forecasting Demo

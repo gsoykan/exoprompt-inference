@@ -1,0 +1,16 @@
+# Streamlit Configuration
+# This file allows you to customize Streamlit settings
+
+[server]
+# Maximum file upload size in MB
+# Default is 200MB. Increase this if you need to upload larger checkpoint files.
+# Note: Your deployment platform may have its own limits.
+maxUploadSize = 1000  # 1GB
+
+# Uncomment to enable CORS if deploying
+# enableCORS = false
+# enableXsrfProtection = false
+
+[browser]
+# Gather usage statistics (set to false for privacy)
+gatherUsageStats = false
