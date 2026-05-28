@@ -35,6 +35,25 @@ HF_MODELS: dict[str, str] = {
     "Vanilla Transformer — Mixed (200k)": "200k_vanilla_mixed.ckpt",
 }
 
+# =============================================================================
+# Bundled sample data
+# =============================================================================
+
+# Repo root: src/exoprompt_inference/streamlit/app.py → parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[3]
+
+# Friendly label → (csv path, json path) inside `examples/`.
+SAMPLE_DATA: dict[str, dict[str, Path]] = {
+    "HPS lighting (paper data)": {
+        "csv": REPO_ROOT / "examples" / "hps" / "timeseries.csv",
+        "json": REPO_ROOT / "examples" / "hps" / "exo_params.json",
+    },
+    "LED lighting (paper data)": {
+        "csv": REPO_ROOT / "examples" / "led" / "timeseries.csv",
+        "json": REPO_ROOT / "examples" / "led" / "exo_params.json",
+    },
+}
+
 # Add project root to path for imports
 project_root = Path(__file__).parents[2]
 if str(project_root) not in sys.path:
@@ -136,19 +155,45 @@ def render_sidebar():
     # -------------------------------------------------------------------------
     st.sidebar.header("📁 Data")
 
-    # CSV upload
-    csv_file = st.sidebar.file_uploader(
-        "Time Series CSV (required)",
-        type=["csv"],
-        help="Upload a CSV file with greenhouse time series data (18 features)",
+    # Sample-vs-upload toggle. Sample is the default so the demo is usable on
+    # first visit without uploading anything.
+    data_source = st.sidebar.radio(
+        "Data Source",
+        options=["Sample (paper data)", "Upload my own"],
+        help="Use a bundled greenhouse trajectory from the paper, or upload your own.",
     )
 
-    # JSON upload (optional)
-    json_file = st.sidebar.file_uploader(
-        "Exo Params JSON (optional)",
-        type=["json"],
-        help="Upload a JSON file with greenhouse model parameters (254 params)",
-    )
+    csv_bytes: bytes | None = None
+    json_bytes: bytes | None = None
+
+    if data_source == "Sample (paper data)":
+        sample_label = st.sidebar.selectbox(
+            "Scenario",
+            options=list(SAMPLE_DATA.keys()),
+            help="Pre-loaded greenhouse trajectories from the paper datasets.",
+        )
+        sample = SAMPLE_DATA[sample_label]
+        csv_bytes = sample["csv"].read_bytes()
+        json_bytes = sample["json"].read_bytes()
+        st.sidebar.caption(
+            f"Loaded `{sample['csv'].relative_to(REPO_ROOT)}` and "
+            f"`{sample['json'].relative_to(REPO_ROOT)}`."
+        )
+    else:
+        csv_file = st.sidebar.file_uploader(
+            "Time Series CSV (required)",
+            type=["csv"],
+            help="Upload a CSV file with greenhouse time series data (18 features)",
+        )
+        json_file = st.sidebar.file_uploader(
+            "Exo Params JSON (optional)",
+            type=["json"],
+            help="Upload a JSON file with greenhouse model parameters (254 params)",
+        )
+        if csv_file is not None:
+            csv_bytes = csv_file.getvalue()
+        if json_file is not None:
+            json_bytes = json_file.getvalue()
 
     st.sidebar.markdown("---")
 
@@ -254,8 +299,8 @@ def render_sidebar():
         )
 
     return {
-        "csv_file": csv_file,
-        "json_file": json_file,
+        "csv_bytes": csv_bytes,
+        "json_bytes": json_bytes,
         "model_type": model_type,
         "checkpoint_method": checkpoint_method,
         "checkpoint_file": checkpoint_file,
@@ -281,7 +326,7 @@ def render_main(config: dict):
     )
 
     # Check if we have required inputs
-    if config["csv_file"] is None:
+    if config["csv_bytes"] is None:
         st.info("👈 Please upload a CSV file in the sidebar to get started.")
         return
 
@@ -304,16 +349,16 @@ def render_main(config: dict):
     # -------------------------------------------------------------------------
     with st.spinner("Loading data..."):  # type: ignore
         try:
-            timeseries_data = cached_load_csv(config["csv_file"].getvalue())
+            timeseries_data = cached_load_csv(config["csv_bytes"])
             st.success(f"Loaded {len(timeseries_data)} timesteps from CSV")
         except Exception as e:
             st.error(f"Failed to load CSV: {e}")
             return
 
         exo_prompt_data = None
-        if config["json_file"] is not None:
+        if config["json_bytes"] is not None:
             try:
-                exo_prompt_data = cached_load_json(config["json_file"].getvalue())
+                exo_prompt_data = cached_load_json(config["json_bytes"])
                 st.success(
                     f"Loaded {len(exo_prompt_data.get_present_param_names())} exo params"
                 )
